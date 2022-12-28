@@ -18,18 +18,18 @@ const Profile = ({ currentUser }: ProfileProps) => {
   );
 
   useEffect(() => {
-    (async () => {
-      let response: Awaited<ReturnType<typeof getCurrentUser>>;
-      if (currentUser) {
-        response = await getCurrentUser(token as string);
-      } else {
-        response = await getUser(token as string, username as string);
-      }
-      if (response.status === 200) {
-        setProfileData(response.data);
-      }
-    })();
-  }, [currentUser]);
+    const responsePromise = currentUser
+      ? getCurrentUser(token as string)
+      : getUser(token as string, username as string);
+
+    responsePromise
+      .then(({ data, status }) => {
+        if (status === 200) {
+          setProfileData(data);
+        }
+      })
+      .catch(() => {});
+  }, [username]);
 
   return (
     <Container style={{ maxWidth: "400px" }}>

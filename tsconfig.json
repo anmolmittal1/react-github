@@ -19,12 +19,14 @@
     "paths": {
       "@components/*": ["src/components/*"],
       "@context/*": ["src/context/*"],
+      "@constants/*": ["src/constants/*"],
       "@features/*": ["src/features/*"],
+      "@hooks/*": ["src/hooks/*"],
       "@layout/*": ["src/layout/*"],
       "@pages/*": ["src/pages/*"]
     }
   },
   "include": ["src"],
-  "exclude": ["node_modules", "src/app"],
+  "exclude": ["node_modules"],
   "references": [{ "path": "./tsconfig.node.json" }],
 }

@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { Container, ListGroup } from "react-bootstrap";
 import Spinner from "react-bootstrap/Spinner";
 
 import { SearchBar, SearchBarElement } from "@components/SearchBar";
 import { SimplePagination } from "@components/SimplePagination";
 import { useAuthContext } from "@context/useAuthContext";
+import { ROUTES as routeConstants } from "@constants/routes";
 import { search } from "@features/github/service";
 import { SearchResult } from "@features/user/components";
+import { useParamNavigate } from "@hooks/useParamNavigate";
 
 interface SearchProps {
   type: string;
@@ -18,8 +20,8 @@ interface SearchProps {
 const Search = ({ type, queryField, pageSize }: SearchProps) => {
   const searchID = `${type}-search`;
 
+  const navigate = useParamNavigate();
   const { token } = useAuthContext();
-  const navigate = useNavigate();
   const [queryParams, setQueryParams] = useSearchParams();
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -72,9 +74,9 @@ const Search = ({ type, queryField, pageSize }: SearchProps) => {
         placeholder="Search Users"
       />
 
-      {/* Results */}
       {!loading ? (
         <>
+          {/* Results */}
           <ListGroup>
             {results.map((data) => (
               <SearchResult
@@ -82,7 +84,11 @@ const Search = ({ type, queryField, pageSize }: SearchProps) => {
                 key={data.id}
                 className="d-flex align-items-center"
                 style={{ maxHeight: "50px" }}
-                onClick={() => navigate(`/users/${data.login}`)}
+                onClick={() =>
+                  navigate(routeConstants.USER_PROFILE.PATH, {
+                    username: data.login,
+                  })
+                }
                 avatarUrl={data.avatar_url}
                 username={data.login}
               />

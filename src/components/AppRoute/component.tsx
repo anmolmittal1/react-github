@@ -1,15 +1,16 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 
 import { useAuthContext } from "@context/useAuthContext";
+import { ROUTES as routeConstants } from "@constants/routes";
 import { AppRouteProps } from "./interface";
 
-export const AppRoute = ({ children, authRequired = false }: AppRouteProps) => {
+export const AppRoute = ({ authRequired }: AppRouteProps) => {
   const { token } = useAuthContext();
   if (authRequired && !token) {
-    return <Navigate to="/" />;
+    return <Navigate to={routeConstants.ROOT.PATH} />;
   }
   if (!authRequired && token) {
-    return <Navigate to="dashboard" />;
+    return <Navigate to={routeConstants.DASHBOARD.PATH} />;
   }
-  return <>{children}</>;
+  return <Outlet />;
 };
